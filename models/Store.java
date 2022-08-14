@@ -45,7 +45,7 @@ public class Store {
                         return movies.get(i);
                     }
                     else{
-                        basicMovie.setName("\nThe movie: " + movies.get(i).getName() + " is rented.\n");
+                        basicMovie.setName("\n" + movies.get(i).getName() + " is rented.\n");
                         return basicMovie;
                     }
                 }
@@ -68,13 +68,31 @@ public class Store {
     // Rent Movie
     public void rentMovie(String movieName){
         Movie currentMovie = getMovie(movieName);
-        currentMovie.setAvailability(false);
-        System.out.println("\nYou rented: " + currentMovie.getName() + " for " + currentMovie.getRentalPrice() + " in " + currentMovie.getFormat() + " format.");
+        if (currentMovie.isAvailable()){
+            currentMovie.setAvailability(false);
+            System.out.println("\nYou rented: " + currentMovie.getName() + " for " + currentMovie.getRentalPrice() + " in " + currentMovie.getFormat() + " format.");
+        }
+        else{
+            System.out.println(movieName);
+            return;
+        }
     }
     // Return movie
     public void returnMovie(String movieName){
-        Movie currentMovie = getMovie(movieName);
-        currentMovie.setAvailability(true);
-        System.out.println("\nYou returned: " + currentMovie.getName());
+        // Lower case useer input movie title
+        movieName = movieName.toLowerCase();
+
+        for (int i = 0; i < movies.size(); i++) {
+            if (movies.get(i).getName().toLowerCase().contains(movieName)){
+                Movie currentMovie = movies.get(i);
+                if (!currentMovie.isAvailable()) {
+                    currentMovie.setAvailability(true);
+                    System.out.println("\nYou returned: " + currentMovie.getName());
+                }
+                else{
+                    System.out.println("The movie: " + currentMovie.getName() + " is already returned.");
+                }
+            }
+        }
     }
 }
